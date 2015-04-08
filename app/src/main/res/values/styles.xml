@@ -1,0 +1,34 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="NomNomTheme" parent="Theme.AppCompat.Light">
+        <!-- Customize your theme here. -->
+        <item name="android:windowBackground">@color/beige</item>
+        <item name="android:actionBarStyle">@style/NomNomActionBarTheme</item>
+        <item name="android:actionMenuTextColor">@color/white</item>
+        <item name="android:homeAsUpIndicator">@drawable/back</item>
+
+        <!-- Support library compatibility -->
+        <item name="actionBarStyle">@style/NomNomActionBarTheme</item>
+        <item name="actionMenuTextColor">@color/white</item>
+        <item name="homeAsUpIndicator">@drawable/back</item>
+    </style>
+
+    <!-- ActionBar styles -->
+    <style name="NomNomActionBarTheme"
+        parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
+        <item name="android:background">@color/tag_red</item>
+        <item name="android:titleTextStyle">@style/NomNomActionBarTitleText</item>
+
+        <!-- Support library compatibility -->
+        <item name="background">@color/tag_red</item>
+        <item name="titleTextStyle">@style/NomNomActionBarTitleText</item>
+    </style>
+
+    <!-- ActionBar title text -->
+    <style name="NomNomActionBarTitleText"
+        parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+</resources>

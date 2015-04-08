@@ -1,0 +1,37 @@
+<resources>
+    <string name="app_name">Nom Nom</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_diet">Diet</string>
+    <string name="action_health">Health</string>
+    <string name="action_calories">Calories</string>
+
+    <string name="dialog_diet_settings">Diet Preferences</string>
+    <string name="dialog_health_settings">Health Preferences</string>
+    <string name="dialog_calories_settings">Calories Count In A Recipe</string>
+
+    <string name="ok">Ok</string>
+    <string name="cancel">Cancel</string>
+
+    <string-array name="diet_labels">
+        <item>Balanced</item>
+        <item>High protein</item>
+        <item>Low carb</item>
+        <item>Low fat</item>
+        <item>High fiber</item>
+        <item>Low sodium</item>
+    </string-array>
+
+    <string-array name="health_labels">
+        <item>Vegetarian</item>
+        <item>Vegan</item>
+        <item>Gluten free</item>
+        <item>Dairy free</item>
+        <item>Soy free</item>
+        <item>Fish free</item>
+        <item>Shellfish free</item>
+        <item>Tree-nut free</item>
+        <item>Egg free</item>
+        <item>Peanut free</item>
+    </string-array>
+
+</resources>
