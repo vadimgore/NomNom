@@ -16,7 +16,7 @@ public class AccelerometerManager {
     /** Accuracy configuration */
     private static final float NS2MS = 1000.0f / 1000000000.0f;
     private static float threshold  = 15.0f;
-    private static int interval     = 5000; // 5 sec
+    private static int interval     = 3000; // 3 sec
 
     private static Sensor sensor;
     private static SensorManager sensorManager;
@@ -188,8 +188,8 @@ public class AccelerometerManager {
                                 //(now-lastShake)+"  >= "+interval, 1000).show();
 
                                 if ((now - lastShake)*NS2MS >= interval) {
-                                    Toast.makeText(aContext, "Shake detected",
-                                            Toast.LENGTH_SHORT).show();
+                                    //Toast.makeText(aContext, "Shake detected",
+                                    //        Toast.LENGTH_SHORT).show();
                                     // trigger shake event
                                     listener.onShake(force);
                                 }

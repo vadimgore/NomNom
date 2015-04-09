@@ -34,4 +34,6 @@
         <item>Peanut free</item>
     </string-array>
 
+    <string name="title_activity_recipe_viewer">Recipe de jour</string>
+
 </resources>

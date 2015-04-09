@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -22,6 +23,7 @@ class HttpGetter extends AsyncTask<String, String, String> {
 
     Context mContext;
     String mProgressMsg;
+    AsyncTaskListener mListener;
     ProgressDialog mProgressDialog;
 
     public HttpGetter() {
@@ -29,21 +31,19 @@ class HttpGetter extends AsyncTask<String, String, String> {
         mProgressDialog = null;
     }
 
-    public HttpGetter(Context context, String progressMsg) {
+    public HttpGetter(Context context, AsyncTaskListener listener, String progressMsg) {
         mContext = context;
+        mListener = listener;
         mProgressMsg = progressMsg;
+        mProgressDialog = new ProgressDialog(mContext);
+        mProgressDialog.setTitle("Nom Nom");
+        mProgressDialog.setMessage(mProgressMsg);
     }
 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        if (mContext != null) {
-            mProgressDialog = new ProgressDialog(mContext);
-            mProgressDialog.setTitle("Nom Nom");
-            mProgressDialog.setMessage(mProgressMsg);
-            mProgressDialog.setIndeterminate(true);
-            mProgressDialog.show();
-        }
+        mProgressDialog.show();
     }
 
     @Override
@@ -65,9 +65,6 @@ class HttpGetter extends AsyncTask<String, String, String> {
         HttpGet httpGet = new HttpGet(urlString.toString());
 
         try {
-
-            Thread.sleep(5000);
-/*
             HttpResponse response = client.execute(httpGet);
             StatusLine statusLine = response.getStatusLine();
             int statusCode = statusLine.getStatusCode();
@@ -90,7 +87,6 @@ class HttpGetter extends AsyncTask<String, String, String> {
         } catch (IOException e) {
             result.append(e.getMessage());
             e.printStackTrace();
-*/
         } catch (Exception e) {
             result.append(e.getMessage());
             e.printStackTrace();
@@ -100,10 +96,13 @@ class HttpGetter extends AsyncTask<String, String, String> {
     }
 
     protected void onPostExecute(String result) {
+        super.onPreExecute();
         Log.i("onPostExecute: ", result);
-        if (mProgressDialog != null)
+
+        mListener.onTaskComplete(result);
+
+        if (mProgressDialog != null && mProgressDialog.isShowing())
             mProgressDialog.dismiss();
-        //Toast.makeText(mContext, result, Toast.LENGTH_LONG).show();
     }
 }
 
