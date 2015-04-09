@@ -60,7 +60,6 @@ public class HealthDialogFragment extends DialogFragment {
                         // User clicked OK, so save the mSelectedItems results somewhere
                         // or return them to the component that opened the dialog
                         Log.i(TAG, "Selected items are: " + mSelectedItems.toString());
-                        if (mSelectedItems.isEmpty()) return;
 
                         String selected_items = "";
                         for (int i = 0; i < mSelectedItems.size(); i++) {

@@ -43,7 +43,8 @@ class HttpGetter extends AsyncTask<String, String, String> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        mProgressDialog.show();
+        if (mProgressDialog != null && !mProgressDialog.isShowing())
+            mProgressDialog.show();
     }
 
     @Override

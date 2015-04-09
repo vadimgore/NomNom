@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
@@ -40,6 +41,8 @@ public class MainActivity extends ActionBarActivity implements AccelerometerList
     RadioButton mBreakfast;
     RadioButton mLunch;
     RadioButton mDinner;
+    RadioButton mDesert;
+    EditText mIngredients;
 
     String mMeal;
 
@@ -75,14 +78,11 @@ public class MainActivity extends ActionBarActivity implements AccelerometerList
         mBreakfast = (RadioButton) findViewById(R.id.breakfast);
         mLunch = (RadioButton) findViewById(R.id.lunch);
         mDinner = (RadioButton) findViewById(R.id.dinner);
-        mMeal = "dinner";
+        mDesert = (RadioButton) findViewById(R.id.desert);
+        mIngredients = (EditText) findViewById(R.id.ingredients);
 
+        mMeal = "";
         mSharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new MainFragment())
-                    .commit();
-        }
     }
 
     public void onAccelerationChanged(float x, float y, float z) {
@@ -92,7 +92,13 @@ public class MainActivity extends ActionBarActivity implements AccelerometerList
 
     public void onShake(float force) {
         // Do your stuff here
-        String[] ingredients = {mMeal};
+
+        String[] array = mIngredients.getText().toString().split(" ");
+        String[] ingredients = new String[array.length+1];
+        ingredients[0] = mMeal;
+        for (int i=0; i < array.length; i++) {
+            ingredients[i+1] = array[i];
+        }
         findRecipe(ingredients);
     }
 
@@ -328,20 +334,4 @@ public class MainActivity extends ActionBarActivity implements AccelerometerList
         }
     }
 
-
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class MainFragment extends Fragment {
-
-        public MainFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            return rootView;
-        }
-    }
 }
