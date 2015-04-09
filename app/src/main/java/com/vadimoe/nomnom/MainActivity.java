@@ -31,7 +31,7 @@ public class MainActivity extends ActionBarActivity implements AccelerometerList
     final static String APP_ID = "8fd8d674";
     final static String API_KEY = "8a9950dfddae1d65091be2bc07cde612";
 
-    final String[] diet_args = {
+    final String[] diet_filters = {
           "balanced",
           "high-protein",
           "low-carb",
@@ -40,7 +40,7 @@ public class MainActivity extends ActionBarActivity implements AccelerometerList
           "low-sodium"
     };
 
-    final String[] health_args = {
+    final String[] health_filters = {
           "vegetarian",
           "vegan",
           "gluten-free",
@@ -75,31 +75,39 @@ public class MainActivity extends ActionBarActivity implements AccelerometerList
 
     public void onShake(float force) {
 
-        // Do your stuff here
-        String[] ingredients = {"chicken", "rice"};
-        String[] saved_diet_preferences = mSharedPref.getString(
-                getString(R.string.dialog_diet_settings), "").split(",");
-        String[] saved_health_preferences = mSharedPref.getString(
-                getString(R.string.dialog_health_settings), "").split(",");
-        Integer calories_count = mSharedPref.getInt(
-                getString(R.string.dialog_calories_settings), 0)*1000;
-
-        String[] diet_preferences = new String[saved_diet_preferences.length];
-        for (int i = 0; i < saved_diet_preferences.length; i++) {
-            Integer item = Integer.parseInt(saved_diet_preferences[i]);
-            diet_preferences[i] = diet_args[item];
-        }
-
-        String[] health_preferences = new String[saved_health_preferences.length];
-        for (int i = 0; i < saved_health_preferences.length; i++) {
-            Integer item = Integer.parseInt(saved_health_preferences[i]);
-            health_preferences[i] = health_args[item];
-        }
-
-        String recipe = getRecipe(ingredients, diet_preferences, health_preferences, calories_count);
-        Log.i(TAG, "Recipe = " + recipe);
-
         try {
+            //Toast.makeText(getBaseContext(), "Shake Detected", Toast.LENGTH_LONG).show();
+
+            // Do your stuff here
+            String[] ingredients = {"chicken", "rice"};
+            String[] saved_diet_preferences = mSharedPref.getString(
+                    getString(R.string.dialog_diet_settings), "").split(",");
+            String[] saved_health_preferences = mSharedPref.getString(
+                    getString(R.string.dialog_health_settings), "").split(",");
+            Integer calories_count = mSharedPref.getInt(
+                    getString(R.string.dialog_calories_settings), 0)*1000;
+
+            String[] diet_preferences = null;
+            if (!saved_diet_preferences[0].equals("")) {
+                diet_preferences = new String[saved_diet_preferences.length];
+                for (int i = 0; i < saved_diet_preferences.length; i++) {
+                    Integer item = Integer.parseInt(saved_diet_preferences[i]);
+                    diet_preferences[i] = diet_filters[item];
+                }
+            }
+
+            String[] health_preferences = null;
+            if (!saved_health_preferences[0].equals("")) {
+                health_preferences = new String[saved_health_preferences.length];
+                for (int i = 0; i < saved_health_preferences.length; i++) {
+                    Integer item = Integer.parseInt(saved_health_preferences[i]);
+                    health_preferences[i] = health_filters[item];
+                }
+            }
+            
+            String recipe = getRecipe(ingredients, diet_preferences, health_preferences, calories_count);
+            Log.i(TAG, "Recipe = " + recipe);
+
             JSONObject jsonRecipe = new JSONObject(recipe);
 
             String name = jsonRecipe.getString("label");
@@ -109,7 +117,10 @@ public class MainActivity extends ActionBarActivity implements AccelerometerList
         catch (JSONException e) {
             Log.i(TAG, "JSONException:" + e.getMessage());
         }
-    }
+        catch (Exception e) {
+            Log.i(TAG, "Exception:" + e.getMessage());
+        }
+    } 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -210,11 +221,13 @@ public class MainActivity extends ActionBarActivity implements AccelerometerList
         String recipe = "";
         try {
             // Get full Concierge profile from iFashion
-            String httpResponse = new HttpGetter().execute(
-                    EDAMAM_SEARCH_API,
-                    "app_id=" + APP_ID,
-                    "app_key=" + API_KEY,
-                    "q=" + ingredients
+            String httpResponse = new HttpGetter(this,
+                    "Please wait why we are searching for a recipe")
+                    .execute(
+                        EDAMAM_SEARCH_API,
+                        "app_id=" + APP_ID,
+                        "app_key=" + API_KEY,
+                        "q=" + ingredients
                     ).get();
 
             if (!httpResponse.equals("")) {
@@ -228,29 +241,38 @@ public class MainActivity extends ActionBarActivity implements AccelerometerList
                         String calCount = jsonRecipe.get("calories").toString();
 
                         boolean bRecipeMatches = true;
+
                         // Check if recipe matches diet filters
-                        for (String f : diet_filters) {
-                            if (!dietLabels.contains(f)) {
-                                bRecipeMatches = false;
-                                break;
+                        if (diet_filters != null) {
+                            for (String f : diet_filters) {
+                                if (!dietLabels.contains(f)) {
+                                    bRecipeMatches = false;
+                                    break;
+                                }
                             }
                         }
 
                         if (!bRecipeMatches)
+                            // The recipe does not match diet filters, go to next
                             continue;
 
                         // Check if recipe matches health filters
-                        for (String f : health_filters) {
-                            if (!healthLabels.contains(f)) {
-                                bRecipeMatches = false;
-                                break;
+                        if (health_filters != null) {
+                            for (String f : health_filters) {
+                                if (!healthLabels.contains(f)) {
+                                    bRecipeMatches = false;
+                                    break;
+                                }
                             }
                         }
 
-                        if (bRecipeMatches) {
-                            recipe = jsonRecipe.toString();
-                            break;
-                        }
+                        if (!bRecipeMatches)
+                            // The recipe does not match diet filters, go to next
+                            continue;
+
+
+                        // We found the recipe that matches our filters
+                        recipe = jsonRecipe.toString();
                     }
                 }
                 catch (JSONException e) {

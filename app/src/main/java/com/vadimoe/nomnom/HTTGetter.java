@@ -65,6 +65,9 @@ class HttpGetter extends AsyncTask<String, String, String> {
         HttpGet httpGet = new HttpGet(urlString.toString());
 
         try {
+
+            Thread.sleep(5000);
+/*
             HttpResponse response = client.execute(httpGet);
             StatusLine statusLine = response.getStatusLine();
             int statusCode = statusLine.getStatusCode();
@@ -85,6 +88,10 @@ class HttpGetter extends AsyncTask<String, String, String> {
             result.append(e.getMessage());
             e.printStackTrace();
         } catch (IOException e) {
+            result.append(e.getMessage());
+            e.printStackTrace();
+*/
+        } catch (Exception e) {
             result.append(e.getMessage());
             e.printStackTrace();
         }

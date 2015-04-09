@@ -14,8 +14,9 @@ public class AccelerometerManager {
 
 
     /** Accuracy configuration */
+    private static final float NS2MS = 1000.0f / 1000000000.0f;
     private static float threshold  = 15.0f;
-    private static int interval     = 200;
+    private static int interval     = 5000; // 5 sec
 
     private static Sensor sensor;
     private static SensorManager sensorManager;
@@ -173,9 +174,6 @@ public class AccelerometerManager {
                         lastX = x;
                         lastY = y;
                         lastZ = z;
-                        Toast.makeText(aContext,"No Motion detected",
-                                Toast.LENGTH_SHORT).show();
-
                     } else {
                         timeDiff = now - lastUpdate;
 
@@ -189,28 +187,19 @@ public class AccelerometerManager {
                                 //Toast.makeText(Accelerometer.getContext(),
                                 //(now-lastShake)+"  >= "+interval, 1000).show();
 
-                                if (now - lastShake >= interval) {
-
+                                if ((now - lastShake)*NS2MS >= interval) {
+                                    Toast.makeText(aContext, "Shake detected",
+                                            Toast.LENGTH_SHORT).show();
                                     // trigger shake event
                                     listener.onShake(force);
                                 }
-                                else
-                                {
-                                    Toast.makeText(aContext,"No Motion detected",
-                                            Toast.LENGTH_SHORT).show();
-
-                                }
                                 lastShake = now;
                             }
+
                             lastX = x;
                             lastY = y;
                             lastZ = z;
                             lastUpdate = now;
-                        }
-                        else
-                        {
-                            Toast.makeText(aContext,"No Motion detected", Toast.LENGTH_SHORT).show();
-
                         }
                     }
                     // trigger change event

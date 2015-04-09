@@ -1,13 +1,13 @@
 <resources>
     <string name="app_name">Nom Nom</string>
     <string name="action_settings">Settings</string>
-    <string name="action_diet">Diet</string>
-    <string name="action_health">Health</string>
+    <string name="action_diet">Diet Filters</string>
+    <string name="action_health">Health Filters</string>
     <string name="action_calories">Calories</string>
 
-    <string name="dialog_diet_settings">Diet Preferences</string>
-    <string name="dialog_health_settings">Health Preferences</string>
-    <string name="dialog_calories_settings">Calories Count In A Recipe</string>
+    <string name="dialog_diet_settings">Diet Filters</string>
+    <string name="dialog_health_settings">Health Filters</string>
+    <string name="dialog_calories_settings">Calories In A Recipe</string>
 
     <string name="ok">Ok</string>
     <string name="cancel">Cancel</string>
